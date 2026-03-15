@@ -1,0 +1,7 @@
+twelvedata
+yfinance
+pandas
+numpy
+requests
+python-dotenv
+streamlit
