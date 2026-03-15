@@ -197,6 +197,14 @@ def save_trade(trade_data):
     with open(TRADES_FILE, "w") as f:
         json.dump(trades, f, indent=2, default=str)
 
+def push_to_github():
+    try:
+        os.system("git add state.json trades.json")
+        os.system('git commit -m "update state"')
+        os.system("git push")
+        print("  [GIT] ✅ Pushed to GitHub")
+    except Exception as e:
+        print(f"  [GIT] Erreur : {e}")
 
 # ══════════════════════════════════════════════════════════════
 # DOUBLE SOURCE — TWELVE DATA + YFINANCE
@@ -873,6 +881,8 @@ def run_cycle():
                  "Pas de biais clair"
         print(f"  ⏸ Pas de signal — {reason}")
 
+    push_to_github()
+    
     return state
 
 
