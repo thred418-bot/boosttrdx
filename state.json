@@ -1,11 +1,11 @@
 {
-  "timestamp": "2026-03-15T23:32:09.359364",
-  "prix": 4989.62,
+  "timestamp": "2026-03-15T23:38:11.993089",
+  "prix": 4983.2,
   "bias": "SELL",
   "bias_reason": "H4 BEAR + H1 BEAR",
-  "score_buy": 35,
-  "score_sell": 73,
-  "score_actif": 73,
+  "score_buy": 20,
+  "score_sell": 72,
+  "score_actif": 72,
   "seuil": 60,
   "style": "INTRADAY",
   "amd_phase": "TRANSITION",
@@ -17,9 +17,9 @@
   "m5_dow": "BEAR",
   "macd_bull": "False",
   "macd_bear": "True",
-  "rsi": 29.0,
-  "entree": "5014.64",
-  "sl": "5029.47",
+  "rsi": 23.6,
+  "entree": "5019.91",
+  "sl": "5022.41",
   "tps": [],
   "zones_buy": [
     [
@@ -70,15 +70,6 @@
   ],
   "zones_sell": [
     [
-      4,
-      "M15",
-      "OB",
-      5001.3,
-      5014.64,
-      5027.97,
-      "PROCHE"
-    ],
-    [
       3,
       "H1",
       "LIQ EqHighs",
@@ -86,6 +77,15 @@
       5019.91,
       5020.91,
       "AU DESSUS"
+    ],
+    [
+      2,
+      "M15",
+      "OB",
+      5001.3,
+      5014.64,
+      5027.97,
+      "zone"
     ],
     [
       2,
