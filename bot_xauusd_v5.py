@@ -342,7 +342,7 @@ def dow_theory(df):
 
 
 def detect_amd_phase():
-    h = datetime.now(datetime.UTC).hour
+    h = datetime.utcnow().hour
     if 0 <= h < 7:
         return {"phase": "ACCUMULATION", "code": "A", "trade": False,
                 "conseil": "Range asiatique — institutions accumulent"}
@@ -777,7 +777,7 @@ def build_trade_plan(analysis, bias_dir, zones_buy, zones_sell, score_actif, seu
 
 def run_cycle():
     ts  = datetime.now().strftime("%H:%M:%S")
-    now = datetime.now(datetime.UTC)
+    now = datetime.utcnow()
     print(f"\n  [{ts}] Analyse en cours...")
 
     analysis = analyze_all()
@@ -903,7 +903,7 @@ def run():
 
     while True:
         try:
-            now     = datetime.now(datetime.UTC)
+            now     = datetime.utcnow()
             weekday = now.weekday()
             h       = now.hour
 
