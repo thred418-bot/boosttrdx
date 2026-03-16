@@ -1,52 +1,27 @@
 {
-  "timestamp": "2026-03-16T21:26:16.589751",
-  "prix": 5011.3,
-  "bias": "BUY",
-  "bias_reason": "H4 BULL + H1 BULL",
-  "score_buy": 64,
-  "score_sell": 48,
-  "score_actif": 64,
+  "timestamp": "2026-03-16T22:52:15.573822",
+  "prix": 5007.4,
+  "bias": "NEUTRE",
+  "bias_reason": "Conflit H4:BULL / H1:BEAR",
+  "score_buy": 40,
+  "score_sell": 56,
+  "score_actif": 0,
   "seuil": 60,
-  "style": "INTRADAY",
+  "style": "\u2014",
   "amd_phase": "TRANSITION",
   "amd_trade": true,
   "amd_conseil": "Fin NY \u2014 volume en baisse, prudence",
   "h4_dow": "BULL",
-  "h1_dow": "BULL",
-  "m15_dow": "BULL",
+  "h1_dow": "BEAR",
+  "m15_dow": "BEAR",
   "m5_dow": "BEAR",
   "macd_bull": "False",
-  "macd_bear": "True",
-  "rsi": 28.7,
-  "entree": "4996.6",
-  "sl": "4989.5",
-  "tps": [
-    [
-      5030.05,
-      "OB",
-      "H1"
-    ],
-    [
-      5024.15,
-      "LIQ EqHighs",
-      "H1"
-    ],
-    [
-      5021.75,
-      "OB",
-      "M5"
-    ]
-  ],
+  "macd_bear": "False",
+  "rsi": 39.7,
+  "entree": "\u2014",
+  "sl": "\u2014",
+  "tps": [],
   "zones_buy": [
-    [
-      4,
-      "M15",
-      "OB",
-      4991.0,
-      4996.6,
-      5002.2,
-      "PROCHE"
-    ],
     [
       3,
       "H1",
@@ -69,9 +44,9 @@
       3,
       "M5",
       "BREAKER",
-      5021.0,
-      5021.75,
-      5022.5,
+      5011.7,
+      5016.6,
+      5021.5,
       "PROCHE"
     ],
     [
@@ -82,6 +57,15 @@
       4994.95,
       4995.95,
       "EN DESSOUS"
+    ],
+    [
+      1,
+      "M5",
+      "LIQ EqLows",
+      5014.05,
+      5015.05,
+      5016.05,
+      "ATTEINT"
     ]
   ],
   "zones_sell": [
@@ -92,6 +76,15 @@
       5018.8,
       5030.05,
       5041.3,
+      "PROCHE"
+    ],
+    [
+      4,
+      "M15",
+      "OB",
+      5014.2,
+      5021.1,
+      5028.0,
       "PROCHE"
     ],
     [
@@ -107,19 +100,10 @@
       3,
       "M5",
       "OB",
-      5021.0,
-      5021.75,
-      5022.5,
+      5009.3,
+      5011.45,
+      5013.6,
       "PROCHE"
-    ],
-    [
-      2,
-      "M15",
-      "FVG",
-      5016.8,
-      5018.45,
-      5020.1,
-      "attente"
     ],
     [
       2,
@@ -131,5 +115,5 @@
       "zone"
     ]
   ],
-  "signal_fort": true
+  "signal_fort": false
 }
