@@ -1,11 +1,11 @@
 {
-  "timestamp": "2026-03-16T00:38:38.464444",
-  "prix": 5025.09,
+  "timestamp": "2026-03-16T01:13:50.394895",
+  "prix": 5000.35,
   "bias": "SELL",
   "bias_reason": "H4 BEAR + H1 BEAR",
-  "score_buy": 44,
-  "score_sell": 28,
-  "score_actif": 28,
+  "score_buy": 18,
+  "score_sell": 63,
+  "score_actif": 63,
   "seuil": 60,
   "style": "INTRADAY",
   "amd_phase": "ACCUMULATION",
@@ -14,21 +14,41 @@
   "h4_dow": "BEAR",
   "h1_dow": "BEAR",
   "m15_dow": "BULL",
-  "m5_dow": "BULL",
+  "m5_dow": "BEAR",
   "macd_bull": "False",
-  "macd_bear": "False",
-  "rsi": 65.1,
-  "entree": "\u2014",
-  "sl": "\u2014",
-  "tps": [],
+  "macd_bear": "True",
+  "rsi": 31.5,
+  "entree": "5019.91",
+  "sl": "5022.41",
+  "tps": [
+    [
+      4978.41,
+      "OB",
+      "M5"
+    ],
+    [
+      4985.92,
+      "OB",
+      "M15"
+    ]
+  ],
   "zones_buy": [
+    [
+      5,
+      "H1",
+      "OB",
+      5019.25,
+      5019.63,
+      5020.01,
+      "PROCHE"
+    ],
     [
       4,
       "M15",
-      "BREAKER",
-      5010.53,
-      5018.68,
-      5026.83,
+      "OB",
+      4979.39,
+      4985.92,
+      4992.46,
       "PROCHE"
     ],
     [
@@ -38,46 +58,28 @@
       5018.62,
       5019.62,
       5020.62,
-      "EN DESSOUS"
+      "ATTEINT"
     ],
     [
-      2,
-      "M15",
-      "OB",
-      4979.39,
-      4985.92,
-      4992.46,
-      "zone"
-    ],
-    [
-      2,
-      "M15",
-      "LIQ EqLows",
-      5018.62,
-      5019.62,
-      5020.62,
-      "EN DESSOUS"
-    ],
-    [
-      1,
+      3,
       "M5",
       "OB",
       4972.85,
       4978.41,
       4983.97,
+      "PROCHE"
+    ],
+    [
+      2,
+      "M15",
+      "BREAKER",
+      5010.53,
+      5018.68,
+      5026.83,
       "zone"
     ]
   ],
   "zones_sell": [
-    [
-      5,
-      "H1",
-      "OB",
-      5019.52,
-      5019.78,
-      5020.04,
-      "PROCHE"
-    ],
     [
       3,
       "H1",
@@ -85,7 +87,7 @@
       5018.91,
       5019.91,
       5020.91,
-      "ATTEINT"
+      "AU DESSUS"
     ],
     [
       2,
@@ -94,7 +96,16 @@
       5018.9,
       5019.9,
       5020.9,
-      "ATTEINT"
+      "AU DESSUS"
+    ],
+    [
+      1,
+      "M5",
+      "FVG",
+      5015.69,
+      5015.81,
+      5015.94,
+      "attente"
     ],
     [
       1,
@@ -109,10 +120,10 @@
       1,
       "M5",
       "LIQ EqHighs",
-      5005.2,
-      5006.2,
-      5007.2,
-      "ATTEINT"
+      5026.75,
+      5027.75,
+      5028.75,
+      "AU DESSUS"
     ]
   ],
   "signal_fort": false
