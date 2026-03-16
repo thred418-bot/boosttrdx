@@ -1,78 +1,35 @@
 {
-  "timestamp": "2026-03-16T15:54:24.256862",
-  "prix": 5000.8,
-  "bias": "SELL",
-  "bias_reason": "H4 BEAR + H1 BEAR",
-  "score_buy": 55,
-  "score_sell": 62,
-  "score_actif": 62,
+  "timestamp": "2026-03-16T19:11:23.370702",
+  "prix": 5020.9,
+  "bias": "NEUTRE",
+  "bias_reason": "Conflit H4:BULL / H1:BEAR",
+  "score_buy": 61,
+  "score_sell": 44,
+  "score_actif": 0,
   "seuil": 60,
-  "style": "INTRADAY",
+  "style": "\u2014",
   "amd_phase": "DISTRIBUTION",
   "amd_trade": true,
   "amd_conseil": "New York actif \u2014 vrai mouvement directionnel",
-  "h4_dow": "BEAR",
+  "h4_dow": "BULL",
   "h1_dow": "BEAR",
-  "m15_dow": "BEAR",
-  "m5_dow": "BEAR",
+  "m15_dow": "BULL",
+  "m5_dow": "BULL",
   "macd_bull": "False",
   "macd_bear": "False",
-  "rsi": 39.5,
-  "entree": "5010.15",
-  "sl": "5025.0",
-  "tps": [
-    [
-      4988.35,
-      "LIQ EqLows",
-      "M15"
-    ],
-    [
-      4996.05,
-      "LIQ EqLows",
-      "M5"
-    ],
-    [
-      4997.45,
-      "OB",
-      "M5"
-    ]
-  ],
+  "rsi": 74.7,
+  "entree": "\u2014",
+  "sl": "\u2014",
+  "tps": [],
   "zones_buy": [
-    [
-      6,
-      "H1",
-      "OB",
-      4996.8,
-      5012.5,
-      5028.2,
-      "DEDANS"
-    ],
-    [
-      5,
-      "M15",
-      "OB",
-      4996.8,
-      5010.15,
-      5023.5,
-      "DEDANS"
-    ],
-    [
-      4,
-      "M5",
-      "OB",
-      4988.5,
-      4997.45,
-      5006.4,
-      "DEDANS"
-    ],
     [
       3,
       "H1",
-      "BREAKER",
-      5000.0,
-      5017.7,
-      5035.4,
-      "zone"
+      "FVG",
+      5009.6,
+      5014.15,
+      5018.7,
+      "attente"
     ],
     [
       3,
@@ -82,54 +39,81 @@
       5000.7,
       5001.7,
       "EN DESSOUS"
-    ]
-  ],
-  "zones_sell": [
-    [
-      4,
-      "M15",
-      "BREAKER",
-      4996.8,
-      5010.15,
-      5023.5,
-      "PROCHE"
-    ],
-    [
-      3,
-      "H1",
-      "FVG",
-      5010.9,
-      5014.85,
-      5018.8,
-      "attente"
-    ],
-    [
-      3,
-      "H1",
-      "LIQ EqHighs",
-      5127.2,
-      5128.2,
-      5129.2,
-      "AU DESSUS"
     ],
     [
       3,
       "M5",
-      "BREAKER",
-      4997.7,
-      5000.85,
-      5004.0,
+      "OB",
+      5003.2,
+      5004.85,
+      5006.5,
       "PROCHE"
     ],
     [
       2,
       "M15",
-      "LIQ EqHighs",
+      "LIQ EqLows",
       4993.95,
       4994.95,
       4995.95,
+      "EN DESSOUS"
+    ],
+    [
+      1,
+      "M5",
+      "LIQ EqLows",
+      4994.85,
+      4995.85,
+      4996.85,
+      "EN DESSOUS"
+    ]
+  ],
+  "zones_sell": [
+    [
+      6,
+      "H1",
+      "OB",
+      5018.8,
+      5030.05,
+      5041.3,
+      "DEDANS"
+    ],
+    [
+      4,
+      "M15",
+      "OB",
+      4995.9,
+      5002.75,
+      5009.6,
+      "PROCHE"
+    ],
+    [
+      3,
+      "H1",
+      "BREAKER",
+      4976.5,
+      4986.05,
+      4995.6,
+      "zone"
+    ],
+    [
+      3,
+      "H1",
+      "LIQ EqHighs",
+      5023.15,
+      5024.15,
+      5025.15,
+      "AU DESSUS"
+    ],
+    [
+      2,
+      "M15",
+      "LIQ EqHighs",
+      5002.8,
+      5003.8,
+      5004.8,
       "ATTEINT"
     ]
   ],
-  "signal_fort": true
+  "signal_fort": false
 }
