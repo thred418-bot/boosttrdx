@@ -1,25 +1,25 @@
 {
-  "timestamp": "2026-03-16T19:21:04.572745",
-  "prix": 5022.0,
+  "timestamp": "2026-03-16T20:26:47.644575",
+  "prix": 5022.2,
   "bias": "BUY",
   "bias_reason": "H4 BULL + H1 BULL",
-  "score_buy": 68,
-  "score_sell": 36,
-  "score_actif": 68,
-  "seuil": 50,
-  "style": "SCALP",
-  "amd_phase": "DISTRIBUTION",
+  "score_buy": 61,
+  "score_sell": 32,
+  "score_actif": 61,
+  "seuil": 60,
+  "style": "INTRADAY",
+  "amd_phase": "TRANSITION",
   "amd_trade": true,
-  "amd_conseil": "New York actif \u2014 vrai mouvement directionnel",
+  "amd_conseil": "Fin NY \u2014 volume en baisse, prudence",
   "h4_dow": "BULL",
   "h1_dow": "BULL",
   "m15_dow": "BULL",
   "m5_dow": "BULL",
   "macd_bull": "False",
   "macd_bear": "False",
-  "rsi": 71.4,
-  "entree": "5004.85",
-  "sl": "5001.7",
+  "rsi": 59.2,
+  "entree": "5030.05",
+  "sl": "5017.3",
   "tps": [
     [
       5030.05,
@@ -36,11 +36,11 @@
     [
       3,
       "H1",
-      "FVG",
-      5009.6,
-      5012.2,
-      5014.8,
-      "attente"
+      "BREAKER",
+      5018.8,
+      5030.05,
+      5041.3,
+      "zone"
     ],
     [
       3,
@@ -52,13 +52,13 @@
       "EN DESSOUS"
     ],
     [
-      3,
-      "M5",
+      2,
+      "M15",
       "OB",
-      5003.2,
-      5004.85,
-      5006.5,
-      "PROCHE"
+      4991.0,
+      4996.6,
+      5002.2,
+      "zone"
     ],
     [
       2,
@@ -73,9 +73,9 @@
       1,
       "M5",
       "LIQ EqLows",
-      4994.85,
-      4995.85,
-      4996.85,
+      5016.55,
+      5017.55,
+      5018.55,
       "EN DESSOUS"
     ]
   ],
@@ -90,24 +90,6 @@
       "DEDANS"
     ],
     [
-      4,
-      "M15",
-      "OB",
-      4995.9,
-      5002.75,
-      5009.6,
-      "PROCHE"
-    ],
-    [
-      3,
-      "H1",
-      "BREAKER",
-      4976.5,
-      4986.05,
-      4995.6,
-      "zone"
-    ],
-    [
       3,
       "H1",
       "LIQ EqHighs",
@@ -117,13 +99,31 @@
       "AU DESSUS"
     ],
     [
+      3,
+      "M5",
+      "OB",
+      5016.1,
+      5018.95,
+      5021.8,
+      "PROCHE"
+    ],
+    [
+      3,
+      "M5",
+      "BREAKER",
+      5015.8,
+      5018.2,
+      5020.6,
+      "PROCHE"
+    ],
+    [
       2,
       "M15",
-      "LIQ EqHighs",
-      5002.8,
-      5003.8,
-      5004.8,
-      "ATTEINT"
+      "BREAKER",
+      4991.0,
+      4996.6,
+      5002.2,
+      "zone"
     ]
   ],
   "signal_fort": true
