@@ -1,10 +1,10 @@
 {
-  "timestamp": "2026-03-16T04:13:33.428135",
-  "prix": 5023.66,
+  "timestamp": "2026-03-16T04:48:32.953597",
+  "prix": 5015.38,
   "bias": "NEUTRE",
   "bias_reason": "Conflit H4:BEAR / H1:BULL",
-  "score_buy": 53,
-  "score_sell": 34,
+  "score_buy": 23,
+  "score_sell": 55,
   "score_actif": 0,
   "seuil": 60,
   "style": "\u2014",
@@ -13,11 +13,11 @@
   "amd_conseil": "Range asiatique \u2014 institutions accumulent",
   "h4_dow": "BEAR",
   "h1_dow": "BULL",
-  "m15_dow": "BEAR",
+  "m15_dow": "BULL",
   "m5_dow": "BULL",
   "macd_bull": "False",
-  "macd_bear": "False",
-  "rsi": 76.5,
+  "macd_bear": "True",
+  "rsi": 38.7,
   "entree": "\u2014",
   "sl": "\u2014",
   "tps": [],
@@ -38,34 +38,34 @@
       5018.62,
       5019.62,
       5020.62,
-      "EN DESSOUS"
+      "ATTEINT"
     ],
     [
       3,
       "M5",
       "OB",
-      4998.48,
-      5000.14,
-      5001.8,
+      5018.93,
+      5019.64,
+      5020.34,
       "PROCHE"
     ],
     [
       2,
       "M15",
-      "FVG",
-      5017.74,
-      5018.4,
-      5019.05,
-      "attente"
+      "LIQ EqLows",
+      5018.42,
+      5019.42,
+      5020.42,
+      "ATTEINT"
     ],
     [
-      2,
-      "M15",
+      1,
+      "M5",
       "LIQ EqLows",
-      5018.61,
-      5019.61,
-      5020.61,
-      "EN DESSOUS"
+      5018.7,
+      5019.7,
+      5020.7,
+      "ATTEINT"
     ]
   ],
   "zones_sell": [
@@ -88,31 +88,31 @@
       "PROCHE"
     ],
     [
+      4,
+      "M15",
+      "BREAKER",
+      5001.07,
+      5003.6,
+      5006.14,
+      "PROCHE"
+    ],
+    [
       3,
       "H1",
       "LIQ EqHighs",
       5018.91,
       5019.91,
       5020.91,
-      "ATTEINT"
+      "AU DESSUS"
     ],
     [
-      2,
-      "M15",
+      3,
+      "M5",
       "BREAKER",
-      4986.62,
-      4995.93,
-      5005.23,
-      "zone"
-    ],
-    [
-      2,
-      "M15",
-      "LIQ EqHighs",
-      5005.18,
-      5006.18,
-      5007.18,
-      "ATTEINT"
+      5018.93,
+      5019.63,
+      5020.34,
+      "PROCHE"
     ]
   ],
   "signal_fort": false
