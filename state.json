@@ -1,10 +1,10 @@
 {
-  "timestamp": "2026-03-16T22:52:15.573822",
-  "prix": 5007.4,
+  "timestamp": "2026-03-16T23:47:56.876071",
+  "prix": 5015.2,
   "bias": "NEUTRE",
   "bias_reason": "Conflit H4:BULL / H1:BEAR",
-  "score_buy": 40,
-  "score_sell": 56,
+  "score_buy": 70,
+  "score_sell": 32,
   "score_actif": 0,
   "seuil": 60,
   "style": "\u2014",
@@ -14,14 +14,32 @@
   "h4_dow": "BULL",
   "h1_dow": "BEAR",
   "m15_dow": "BEAR",
-  "m5_dow": "BEAR",
-  "macd_bull": "False",
+  "m5_dow": "BULL",
+  "macd_bull": "True",
   "macd_bear": "False",
-  "rsi": 39.7,
+  "rsi": 60.3,
   "entree": "\u2014",
   "sl": "\u2014",
   "tps": [],
   "zones_buy": [
+    [
+      4,
+      "M15",
+      "OB",
+      5003.9,
+      5007.05,
+      5010.2,
+      "PROCHE"
+    ],
+    [
+      4,
+      "M15",
+      "BREAKER",
+      5014.2,
+      5021.1,
+      5028.0,
+      "PROCHE"
+    ],
     [
       3,
       "H1",
@@ -43,29 +61,11 @@
     [
       3,
       "M5",
-      "BREAKER",
+      "OB",
+      5010.4,
+      5011.05,
       5011.7,
-      5016.6,
-      5021.5,
       "PROCHE"
-    ],
-    [
-      2,
-      "M15",
-      "LIQ EqLows",
-      4993.95,
-      4994.95,
-      4995.95,
-      "EN DESSOUS"
-    ],
-    [
-      1,
-      "M5",
-      "LIQ EqLows",
-      5014.05,
-      5015.05,
-      5016.05,
-      "ATTEINT"
     ]
   ],
   "zones_sell": [
@@ -76,15 +76,6 @@
       5018.8,
       5030.05,
       5041.3,
-      "PROCHE"
-    ],
-    [
-      4,
-      "M15",
-      "OB",
-      5014.2,
-      5021.1,
-      5028.0,
       "PROCHE"
     ],
     [
@@ -99,20 +90,29 @@
     [
       3,
       "M5",
-      "OB",
-      5009.3,
-      5011.45,
-      5013.6,
+      "BREAKER",
+      5005.7,
+      5007.15,
+      5008.6,
       "PROCHE"
     ],
     [
       2,
       "M15",
-      "BREAKER",
-      4991.0,
-      4996.6,
-      5002.2,
-      "zone"
+      "LIQ EqHighs",
+      5009.55,
+      5010.55,
+      5011.55,
+      "ATTEINT"
+    ],
+    [
+      1,
+      "M5",
+      "LIQ EqHighs",
+      5010.45,
+      5011.45,
+      5012.45,
+      "ATTEINT"
     ]
   ],
   "signal_fort": false
