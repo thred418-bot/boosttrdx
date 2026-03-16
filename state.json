@@ -1,11 +1,11 @@
 {
-  "timestamp": "2026-03-16T20:26:47.644575",
-  "prix": 5022.2,
+  "timestamp": "2026-03-16T21:16:11.071364",
+  "prix": 5011.3,
   "bias": "BUY",
   "bias_reason": "H4 BULL + H1 BULL",
-  "score_buy": 61,
-  "score_sell": 32,
-  "score_actif": 61,
+  "score_buy": 64,
+  "score_sell": 48,
+  "score_actif": 64,
   "seuil": 60,
   "style": "INTRADAY",
   "amd_phase": "TRANSITION",
@@ -14,12 +14,12 @@
   "h4_dow": "BULL",
   "h1_dow": "BULL",
   "m15_dow": "BULL",
-  "m5_dow": "BULL",
+  "m5_dow": "BEAR",
   "macd_bull": "False",
-  "macd_bear": "False",
-  "rsi": 59.2,
-  "entree": "5030.05",
-  "sl": "5017.3",
+  "macd_bear": "True",
+  "rsi": 28.7,
+  "entree": "4996.6",
+  "sl": "4989.5",
   "tps": [
     [
       5030.05,
@@ -30,9 +30,23 @@
       5024.15,
       "LIQ EqHighs",
       "H1"
+    ],
+    [
+      5021.75,
+      "OB",
+      "M5"
     ]
   ],
   "zones_buy": [
+    [
+      4,
+      "M15",
+      "OB",
+      4991.0,
+      4996.6,
+      5002.2,
+      "PROCHE"
+    ],
     [
       3,
       "H1",
@@ -52,13 +66,13 @@
       "EN DESSOUS"
     ],
     [
-      2,
-      "M15",
-      "OB",
-      4991.0,
-      4996.6,
-      5002.2,
-      "zone"
+      3,
+      "M5",
+      "BREAKER",
+      5021.0,
+      5021.75,
+      5022.5,
+      "PROCHE"
     ],
     [
       2,
@@ -68,26 +82,17 @@
       4994.95,
       4995.95,
       "EN DESSOUS"
-    ],
-    [
-      1,
-      "M5",
-      "LIQ EqLows",
-      5016.55,
-      5017.55,
-      5018.55,
-      "EN DESSOUS"
     ]
   ],
   "zones_sell": [
     [
-      6,
+      5,
       "H1",
       "OB",
       5018.8,
       5030.05,
       5041.3,
-      "DEDANS"
+      "PROCHE"
     ],
     [
       3,
@@ -102,19 +107,19 @@
       3,
       "M5",
       "OB",
-      5016.1,
-      5018.95,
-      5021.8,
+      5021.0,
+      5021.75,
+      5022.5,
       "PROCHE"
     ],
     [
-      3,
-      "M5",
-      "BREAKER",
-      5015.8,
-      5018.2,
-      5020.6,
-      "PROCHE"
+      2,
+      "M15",
+      "FVG",
+      5016.8,
+      5018.45,
+      5020.1,
+      "attente"
     ],
     [
       2,
