@@ -194,10 +194,15 @@ if state:
 
     amd_color = "#00d084" if amd_trade else "#ffb84d"
     with c4:
+        
+        amd_conseil  = state.get("amd_conseil", "")
+        bias_reason  = state.get("bias_reason", "")
         st.markdown(f"""
         <div class="metric-box">
             <div class="metric-label">AMD</div>
             <div class="metric-value" style="color:{amd_color};font-size:18px">{amd_phase}</div>
+            <div style="color:#5a5f7a;font-size:11px;margin-top:4px">{amd_conseil}</div>
+            <div style="color:#5a5f7a;font-size:11px">{bias_reason}</div>
         </div>""", unsafe_allow_html=True)
 
     sig_color = "#00d084" if signal_fort else "#5a5f7a"
@@ -417,8 +422,11 @@ st.markdown(
 )
 
 # Refresh automatique
-st.markdown("""
-<script>
-setTimeout(function() { window.location.reload(); }, 30000);
-</script>
-""", unsafe_allow_html=True)
+import time
+st.markdown(
+    "<small style='color:#3a3d4a'>Dashboard auto-refresh toutes les 30s · "
+    "XAU/USD SMC Analyzer V5.1</small>",
+    unsafe_allow_html=True
+)
+time.sleep(30)
+st.rerun()

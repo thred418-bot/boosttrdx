@@ -1,7 +1,10 @@
 """
 ╔══════════════════════════════════════════════════════════════╗
-║         XAU/USD SMART MONEY ANALYZER  —  V5.0               ║
-║         + Telegram alerts (texte)                            ║
+║         XAU/USD SMART MONEY ANALYZER  —  V5.1               ║
+║         + Telegram 3 niveaux d'alerte                        ║
+║           → Signal fort    : immédiat                        ║
+║           → Alerte zone    : prix dans zone                  ║
+║           → Rapport 15min  : toujours, même si AMD bloque    ║
 ║         + Export JSON pour dashboard Streamlit               ║
 ║         Intervalle : 5 minutes                               ║
 ╚══════════════════════════════════════════════════════════════╝
@@ -33,17 +36,22 @@ TELEGRAM_TOKEN  = os.getenv("TELEGRAM_TOKEN")
 TELEGRAM_CHAT   = os.getenv("TELEGRAM_CHAT_ID")
 SYMBOL_TD       = "XAU/USD"
 SYMBOL_YF       = "GC=F"
-SLEEP_SECONDS   = 300   # 5 minutes — limite API gratuite Twelve Data
+SLEEP_SECONDS   = 300   # 5 minutes
 
-STATE_FILE      = "state.json"      # lu par le dashboard en temps réel
-TRADES_FILE     = "trades.json"     # historique de tous les signaux
+STATE_FILE      = "state.json"
+TRADES_FILE     = "trades.json"
+
+# ── Alertes Telegram ──────────────────────────────────────────
+RAPPORT_INTERVAL = 900   # rapport toutes les 15 minutes (15 * 60)
+_last_rapport    = 0     # timestamp dernier rapport
+_last_signal     = ""    # dernier signal envoyé (évite doublons)
 
 TF_MAP = {
-    "H4" : {"td": "4h",    "yf": "4h",  "yf_period": "60d",  "nb": 200},
-    "H1" : {"td": "1h",    "yf": "1h",  "yf_period": "30d",  "nb": 200},
-    "M15": {"td": "15min", "yf": "15m", "yf_period": "8d",   "nb": 200},
-    "M5" : {"td": "5min",  "yf": "5m",  "yf_period": "5d",   "nb": 200},
-    "M1" : {"td": "1min",  "yf": "1m",  "yf_period": "1d",   "nb": 100},
+    "H4" : {"td": "4h",    "yf": "4h",  "yf_period": "60d", "nb": 200},
+    "H1" : {"td": "1h",    "yf": "1h",  "yf_period": "30d", "nb": 200},
+    "M15": {"td": "15min", "yf": "15m", "yf_period": "8d",  "nb": 200},
+    "M5" : {"td": "5min",  "yf": "5m",  "yf_period": "5d",  "nb": 200},
+    "M1" : {"td": "1min",  "yf": "1m",  "yf_period": "1d",  "nb": 100},
 }
 
 SCORE_INTRADAY = 60
@@ -89,86 +97,173 @@ def send_telegram(message):
         return False
 
 
-def format_telegram_message(analysis, bias_dir, score_buy, score_sell,
-                             style, seuil, score_actif, zones_buy, zones_sell,
-                             entree, sl, tps):
-    ts   = datetime.now().strftime("%d/%m %H:%M")
-    prix = (analysis.get("M5") or {}).get("close", 0)
-    amd  = analysis.get("amd", {})
-
+# ── NIVEAU 1 : Signal fort ────────────────────────────────────
+def format_signal_fort(analysis, bias_dir, score_buy, score_sell,
+                       style, seuil, score_actif,
+                       zones_buy, zones_sell, entree, sl, tps):
+    ts    = datetime.now().strftime("%d/%m %H:%M")
+    prix  = (analysis.get("M5") or {}).get("close", 0)
+    amd   = analysis.get("amd", {})
     arrow = "🟢 BUY" if bias_dir == "BUY" else "🔴 SELL"
-    bull_dir = "BULL" if bias_dir == "BUY" else "BEAR"
 
-    # Score bar
     filled = int(score_actif / 10)
     bar    = "█" * filled + "░" * (10 - filled)
 
     lines = [
-        f"📊 <b>XAU/USD</b> | {ts} UTC",
+        f"🚀 <b>SIGNAL FORT — {arrow}</b> | {ts}",
         f"💰 Prix : <b>{prix:.2f}</b>",
         f"",
         f"⏰ AMD : {amd.get('phase','?')} — {amd.get('conseil','')}",
-        f"📈 H4 : {(analysis.get('H4') or {}).get('dow','?')}  |  H1 : {(analysis.get('H1') or {}).get('dow','?')}",
+        f"📊 H4 : {(analysis.get('H4') or {}).get('dow','?')}  |  H1 : {(analysis.get('H1') or {}).get('dow','?')}",
         f"",
         f"🎯 <b>BIAIS : {arrow}</b>",
-        f"📊 Score : <b>{score_actif}/100</b>  [{bar}]",
+        f"📈 Score : <b>{score_actif}/100</b>  [{bar}]",
         f"🏷 Style : {style}  (seuil {seuil}pts)",
         f"",
     ]
 
-    # Zones actives
     zones = zones_sell if bias_dir == "SELL" else zones_buy
     if zones:
         lines.append("📍 <b>Zones actives :</b>")
-        icons = {"OB": "🔲", "FVG": "⬜", "BREAKER": "💥", "LIQ EqHighs": "⚡", "LIQ EqLows": "⚡"}
         for z in zones[:3]:
             prio, tf_z, type_z, bas_z, mid_z, haut_z, statut_z = z
-            icon = icons.get(type_z, "▪")
-            lines.append(f"  {icon} {type_z} [{tf_z}]  {bas_z:.2f}–{haut_z:.2f}  <i>{statut_z}</i>")
+            lines.append(f"  • {type_z} [{tf_z}]  {bas_z:.2f}–{haut_z:.2f}  <i>{statut_z}</i>")
         lines.append("")
 
-    # Momentum M5
     m5  = analysis.get("M5") or {}
     mom = m5.get("momentum", {})
-    macd_icon = "✅" if ((bias_dir == "BUY" and mom.get("macd_bull")) or
-                         (bias_dir == "SELL" and mom.get("macd_bear"))) else "⏳"
-    rsi_icon  = "✅" if ((bias_dir == "BUY" and mom.get("rsi_bull")) or
-                         (bias_dir == "SELL" and mom.get("rsi_bear")))  else "⏳"
     cn, cd = m5.get("candle", (None, None))
-    candle_icon = "✅" if (cn and cd == bias_dir) else "⏳"
+    macd_ok   = (bias_dir == "BUY" and mom.get("macd_bull")) or (bias_dir == "SELL" and mom.get("macd_bear"))
+    rsi_ok    = (bias_dir == "BUY" and mom.get("rsi_bull"))  or (bias_dir == "SELL" and mom.get("rsi_bear"))
+    candle_ok = cn and cd == bias_dir
 
     lines += [
         f"⚡ <b>Momentum M5 :</b>",
-        f"  {macd_icon} MACD  {rsi_icon} RSI {mom.get('rsi',0):.0f}  {candle_icon} {cn or 'pas de chandelier'}",
+        f"  {'✅' if macd_ok else '❌'} MACD  {'✅' if rsi_ok else '❌'} RSI {mom.get('rsi',0):.0f}  {'✅' if candle_ok else '❌'} {cn or '—'}",
+        f"",
+        f"🎯 <b>PLAN DE TRADE :</b>",
+        f"  Entrée : <b>{entree}</b>",
+        f"  SL     : {sl}",
+    ]
+
+    if tps:
+        a = "▼" if bias_dir == "SELL" else "▲"
+        for i, (tp_p, tp_type, tp_tf) in enumerate(tps[:3], 1):
+            gain = round(abs(float(entree) - tp_p) * 10, 0)
+            lines.append(f"  TP{i} {a} {tp_p:.2f}  +{gain:.0f} pips  ← {tp_type} [{tp_tf}]")
+
+    nb_ok = sum([macd_ok, rsi_ok, candle_ok])
+    lines += [
+        f"",
+        f"{'✅ PRÊT À ENTRER' if nb_ok >= 2 else '⏳ Attendre chandelier M5'}  ({nb_ok}/3)",
+    ]
+    return "\n".join(lines)
+
+
+# ── NIVEAU 2 : Alerte zone ────────────────────────────────────
+def format_alerte_zone(analysis, bias_dir, score_actif, prix, zone):
+    ts    = datetime.now().strftime("%d/%m %H:%M")
+    prio, tf_z, type_z, bas_z, mid_z, haut_z, statut_z = zone
+    arrow = "🟢 BUY" if bias_dir == "BUY" else "🔴 SELL"
+    amd   = analysis.get("amd", {})
+
+    m5  = analysis.get("M5") or {}
+    mom = m5.get("momentum", {})
+    cn, cd = m5.get("candle", (None, None))
+    macd_ok   = (bias_dir == "BUY" and mom.get("macd_bull")) or (bias_dir == "SELL" and mom.get("macd_bear"))
+    rsi_ok    = (bias_dir == "BUY" and mom.get("rsi_bull"))  or (bias_dir == "SELL" and mom.get("rsi_bear"))
+    candle_ok = cn and cd == bias_dir
+    nb_ok     = sum([macd_ok, rsi_ok, candle_ok])
+    etat      = "✅ ENTRER" if nb_ok >= 2 else ("⏳ PRESQUE" if nb_ok == 1 else "⏸ ATTENDRE")
+
+    lines = [
+        f"⚡ <b>ALERTE ZONE — {type_z} [{tf_z}]</b> | {ts}",
+        f"💰 Prix : <b>{prix:.2f}</b>  —  Zone : {bas_z:.2f}–{haut_z:.2f}  ({statut_z})",
+        f"",
+        f"🎯 Direction : {arrow}  |  Score : {score_actif}/100",
+        f"⏰ AMD : {amd.get('phase','?')} — {amd.get('conseil','')}",
+        f"",
+        f"⚡ Momentum M5 :",
+        f"  {'✅' if macd_ok else '❌'} MACD  {'✅' if rsi_ok else '❌'} RSI {mom.get('rsi',0):.0f}  {'✅' if candle_ok else '❌'} {cn or '—'}",
+        f"",
+        f"<b>{etat}</b>  ({nb_ok}/3 conditions)",
+    ]
+    if not amd.get("trade"):
+        lines.append(f"⚠ AMD {amd.get('phase','?')} — hors DISTRIBUTION, prudence")
+    return "\n".join(lines)
+
+
+# ── NIVEAU 3 : Rapport 15 minutes ────────────────────────────
+def format_rapport_15min(analysis, bias_dir, score_buy, score_sell,
+                         score_actif, seuil, style, amd, prix,
+                         zones_buy, zones_sell, entree, sl):
+    ts    = datetime.now().strftime("%d/%m %H:%M")
+    arrow = "🟢 BUY" if bias_dir == "BUY" else ("🔴 SELL" if bias_dir == "SELL" else "⚪ NEUTRE")
+    trade_ok = amd.get("trade", False)
+
+    filled_b = int(score_buy  / 10)
+    filled_s = int(score_sell / 10)
+    bar_b    = "█" * filled_b + "░" * (10 - filled_b)
+    bar_s    = "█" * filled_s + "░" * (10 - filled_s)
+
+    h4_dow  = (analysis.get("H4")  or {}).get("dow", "?")
+    h1_dow  = (analysis.get("H1")  or {}).get("dow", "?")
+    m15_dow = (analysis.get("M15") or {}).get("dow", "?")
+    m5_dow  = (analysis.get("M5")  or {}).get("dow", "?")
+
+    m5  = analysis.get("M5") or {}
+    mom = m5.get("momentum", {})
+    cn, cd = m5.get("candle", (None, None))
+
+    # Prochaines zones à surveiller
+    zones = zones_sell if bias_dir == "SELL" else zones_buy
+
+    lines = [
+        f"📊 <b>XAU/USD — Rapport 15min</b> | {ts}",
+        f"💰 Prix : <b>{prix:.2f}</b>",
+        f"",
+        f"🕯 H4:{h4_dow}  H1:{h1_dow}  M15:{m15_dow}  M5:{m5_dow}",
+        f"⏰ AMD : <b>{amd.get('phase','?')}</b>  {'✅ tradeable' if trade_ok else '⏸ attendre'}",
+        f"",
+        f"🎯 Biais : {arrow}",
+        f"📈 BUY  {score_buy:3d}/100  [{bar_b}]",
+        f"📉 SELL {score_sell:3d}/100  [{bar_s}]",
         f"",
     ]
 
-    # Plan de trade
-    if score_actif >= seuil and entree != "—":
-        lines += [
-            f"🚀 <b>PLAN DE TRADE :</b>",
-            f"  Entrée : <b>{entree}</b>",
-            f"  SL     : {sl}",
-        ]
-        if tps:
-            for i, (tp_p, tp_type, tp_tf) in enumerate(tps[:3], 1):
-                a = "▼" if bias_dir == "SELL" else "▲"
-                lines.append(f"  TP{i} {a} {tp_p:.2f}  ← {tp_type} [{tp_tf}]")
-        lines.append("")
-        nb_ok = sum([
-            (bias_dir == "BUY" and mom.get("macd_bull")) or (bias_dir == "SELL" and mom.get("macd_bear")),
-            (bias_dir == "BUY" and mom.get("rsi_bull"))  or (bias_dir == "SELL" and mom.get("rsi_bear")),
-        ])
-        if nb_ok == 2:
-            lines.append("✅ <b>2/2 conditions — PRÊT À ENTRER</b>")
-        elif nb_ok == 1:
-            lines.append("⏳ 1/2 conditions — attendre chandelier")
-        else:
-            lines.append("⏸ 0/2 conditions — ne pas entrer")
+    # Statut signal
+    if score_actif >= seuil and trade_ok:
+        lines.append(f"✅ <b>SIGNAL VALIDE</b> — {style}  Score:{score_actif}/100")
+        if entree != "—":
+            lines.append(f"   Entrée:{entree}  SL:{sl}")
+    elif score_actif >= seuil and not trade_ok:
+        lines.append(f"⏳ Score OK ({score_actif}pts) — AMD bloque")
+        lines.append(f"   Attendre DISTRIBUTION (13h–21h Maroc)")
+        if entree != "—":
+            lines.append(f"   Zone en attente : entrée {entree} | SL {sl}")
     else:
-        lines.append(f"⏸ Score insuffisant ou zones non alignées")
-        lines.append(f"  Manque : {seuil - score_actif} pts pour déclencher")
+        manque = seuil - score_actif
+        lines.append(f"⏸ Signal faible — manque {manque}pts")
 
+    # Momentum M5
+    macd_str = f"MACD {'✅' if (bias_dir=='BUY' and mom.get('macd_bull')) or (bias_dir=='SELL' and mom.get('macd_bear')) else '❌'}"
+    rsi_str  = f"RSI {mom.get('rsi',0):.0f} {'✅' if (bias_dir=='BUY' and mom.get('rsi_bull')) or (bias_dir=='SELL' and mom.get('rsi_bear')) else '❌'}"
+    lines += [
+        f"",
+        f"⚡ M5 : {macd_str}  {rsi_str}  {cn or '—'}",
+    ]
+
+    # Zones prioritaires
+    if zones:
+        lines.append(f"")
+        lines.append(f"📍 Zones à surveiller ({('SELL' if bias_dir=='SELL' else 'BUY')}) :")
+        for z in zones[:3]:
+            prio, tf_z, type_z, bas_z, mid_z, haut_z, statut_z = z
+            dist = round(abs(prix - mid_z), 1)
+            dir_str = "↑" if mid_z > prix else "↓"
+            lines.append(f"  {dir_str} {type_z}[{tf_z}] mid:{mid_z:.2f}  {dist}pts  {statut_z}")
+
+    lines += ["", f"🔄 Prochain rapport dans 15min"]
     return "\n".join(lines)
 
 
@@ -177,13 +272,11 @@ def format_telegram_message(analysis, bias_dir, score_buy, score_sell,
 # ══════════════════════════════════════════════════════════════
 
 def save_state(state_data):
-    """Écrit l'état courant — lu par le dashboard toutes les 30s."""
     with open(STATE_FILE, "w") as f:
         json.dump(state_data, f, indent=2, default=str)
 
 
 def save_trade(trade_data):
-    """Ajoute un signal au log de trades."""
     trades = []
     if os.path.exists(TRADES_FILE):
         try:
@@ -192,10 +285,10 @@ def save_trade(trade_data):
         except Exception:
             trades = []
     trades.append(trade_data)
-    # Garder les 200 derniers
     trades = trades[-200:]
     with open(TRADES_FILE, "w") as f:
         json.dump(trades, f, indent=2, default=str)
+
 
 def push_to_github():
     try:
@@ -205,6 +298,7 @@ def push_to_github():
         print("  [GIT] ✅ Pushed to GitHub")
     except Exception as e:
         print(f"  [GIT] Erreur : {e}")
+
 
 # ══════════════════════════════════════════════════════════════
 # DOUBLE SOURCE — TWELVE DATA + YFINANCE
@@ -233,7 +327,7 @@ def fetch_twelvedata(tf_name):
             return None
         df = pd.DataFrame(values)
         df = df.rename(columns={"datetime": "time"})
-        df["time"]  = pd.to_datetime(df["time"])
+        df["time"] = pd.to_datetime(df["time"])
         for col in ["open", "high", "low", "close"]:
             df[col] = df[col].astype(float)
         if "volume" in df.columns:
@@ -289,19 +383,19 @@ def get_data(tf_name):
 
 def calculate_indicators(df):
     df = df.copy()
-    df["ema_fast"]  = df["close"].ewm(span=9,  adjust=False).mean()
-    df["ema_slow"]  = df["close"].ewm(span=21, adjust=False).mean()
-    df["ema_trend"] = df["close"].ewm(span=50, adjust=False).mean()
+    df["ema_fast"]   = df["close"].ewm(span=9,  adjust=False).mean()
+    df["ema_slow"]   = df["close"].ewm(span=21, adjust=False).mean()
+    df["ema_trend"]  = df["close"].ewm(span=50, adjust=False).mean()
     delta = df["close"].diff()
     gain  = delta.clip(lower=0).ewm(span=14, adjust=False).mean()
     loss  = (-delta.clip(upper=0)).ewm(span=14, adjust=False).mean()
-    df["rsi"] = 100 - (100 / (1 + gain / (loss + 1e-10)))
-    ema_f          = df["close"].ewm(span=12, adjust=False).mean()
-    ema_s          = df["close"].ewm(span=26, adjust=False).mean()
-    df["macd"]     = ema_f - ema_s
-    df["macd_sig"] = df["macd"].ewm(span=9, adjust=False).mean()
-    df["macd_hist"]= df["macd"] - df["macd_sig"]
-    df["tr"] = np.maximum(
+    df["rsi"]        = 100 - (100 / (1 + gain / (loss + 1e-10)))
+    ema_f            = df["close"].ewm(span=12, adjust=False).mean()
+    ema_s            = df["close"].ewm(span=26, adjust=False).mean()
+    df["macd"]       = ema_f - ema_s
+    df["macd_sig"]   = df["macd"].ewm(span=9, adjust=False).mean()
+    df["macd_hist"]  = df["macd"] - df["macd_sig"]
+    df["tr"]         = np.maximum(
         df["high"] - df["low"],
         np.maximum(abs(df["high"] - df["close"].shift()),
                    abs(df["low"]  - df["close"].shift()))
@@ -400,17 +494,17 @@ def detect_fvg(df):
     b1, b3 = df.iloc[-3], df.iloc[-1]
     lc = b3["close"]
     if b1["high"] < b3["low"]:
-        bas, haut  = round(b1["high"], 2), round(b3["low"], 2)
-        taille     = round(haut - bas, 2)
-        milieu     = round((bas + haut) / 2, 2)
-        comble     = round(min(100, max(0, (lc - bas) / (taille + 1e-5) * 100)), 1)
+        bas, haut = round(b1["high"], 2), round(b3["low"], 2)
+        taille    = round(haut - bas, 2)
+        milieu    = round((bas + haut) / 2, 2)
+        comble    = round(min(100, max(0, (lc - bas) / (taille + 1e-5) * 100)), 1)
         return {"dir": "BULL", "bas": bas, "milieu": milieu, "haut": haut,
                 "taille": taille, "in_zone": bas <= lc <= haut, "comble": comble}
     if b1["low"] > b3["high"]:
-        bas, haut  = round(b3["high"], 2), round(b1["low"], 2)
-        taille     = round(haut - bas, 2)
-        milieu     = round((bas + haut) / 2, 2)
-        comble     = round(min(100, max(0, (haut - lc) / (taille + 1e-5) * 100)), 1)
+        bas, haut = round(b3["high"], 2), round(b1["low"], 2)
+        taille    = round(haut - bas, 2)
+        milieu    = round((bas + haut) / 2, 2)
+        comble    = round(min(100, max(0, (haut - lc) / (taille + 1e-5) * 100)), 1)
         return {"dir": "BEAR", "bas": bas, "milieu": milieu, "haut": haut,
                 "taille": taille, "in_zone": bas <= lc <= haut, "comble": comble}
     return None
@@ -472,14 +566,14 @@ def get_momentum(df):
     mh  = last["macd_hist"]
     rsi = last["rsi"]
     return {
-        "macd_hist" : round(mh, 3),
-        "macd_bull" : mh > 0 and mh > prev["macd_hist"],
-        "macd_bear" : mh < 0 and mh < prev["macd_hist"],
-        "rsi"       : round(rsi, 1),
-        "rsi_bull"  : (50 <= rsi <= 70) or rsi < 30,
-        "rsi_bear"  : (30 <= rsi <= 50) or rsi > 70,
-        "ema_bull"  : last["ema_fast"] > last["ema_slow"] and last["ema_fast"] > last["ema_trend"],
-        "ema_bear"  : last["ema_fast"] < last["ema_slow"] and last["ema_fast"] < last["ema_trend"],
+        "macd_hist": round(mh, 3),
+        "macd_bull": mh > 0 and mh > prev["macd_hist"],
+        "macd_bear": mh < 0 and mh < prev["macd_hist"],
+        "rsi"      : round(rsi, 1),
+        "rsi_bull" : (50 <= rsi <= 70) or rsi < 30,
+        "rsi_bear" : (30 <= rsi <= 50) or rsi > 70,
+        "ema_bull" : last["ema_fast"] > last["ema_slow"] and last["ema_fast"] > last["ema_trend"],
+        "ema_bear" : last["ema_fast"] < last["ema_slow"] and last["ema_fast"] < last["ema_trend"],
     }
 
 
@@ -496,11 +590,11 @@ def detect_candle(df):
     p2b = abs(p2["close"] - p2["open"])
     p2t = p2["high"] - p2["low"]
     pt  = p1["high"] - p1["low"]
-    if cb < ct * 0.1:                                                           return "Doji",              "NEUTRAL"
-    if clw >= 2*cb and cuw <= cb*0.5 and cb > 0 and c["close"] < avg:          return "Marteau",           "BUY"
-    if clw >= 2*cb and cuw <= cb*0.5 and cb > 0 and c["close"] > avg:          return "Pendu",             "SELL"
-    if cuw >= 2*cb and clw <= cb*0.5 and cb > 0 and c["close"] < avg:          return "Marteau Inverse",   "BUY"
-    if cuw >= 2*cb and clw <= cb*0.5 and cb > 0 and c["close"] > avg:          return "Etoile Filante",    "SELL"
+    if cb < ct * 0.1:                                                          return "Doji",             "NEUTRAL"
+    if clw >= 2*cb and cuw <= cb*0.5 and cb > 0 and c["close"] < avg:         return "Marteau",          "BUY"
+    if clw >= 2*cb and cuw <= cb*0.5 and cb > 0 and c["close"] > avg:         return "Pendu",            "SELL"
+    if cuw >= 2*cb and clw <= cb*0.5 and cb > 0 and c["close"] < avg:         return "Marteau Inverse",  "BUY"
+    if cuw >= 2*cb and clw <= cb*0.5 and cb > 0 and c["close"] > avg:         return "Etoile Filante",   "SELL"
     if p1["is_bear"] and c["is_bull"] and c["open"] <= p1["close"] and c["close"] >= p1["open"] and cb > pb:
         return "Avalement Haussier", "BUY"
     if p1["is_bull"] and c["is_bear"] and c["open"] >= p1["close"] and c["close"] <= p1["open"] and cb > pb:
@@ -694,7 +788,7 @@ def collect_zones(analysis):
     for tf_name in ["H1", "M15", "M5"]:
         tf    = analysis.get(tf_name) or {}
         poids = {"H1": 3, "M15": 2, "M5": 1}[tf_name]
-        ob    = tf.get("ob")
+        ob = tf.get("ob")
         if ob:
             statut = "DEDANS" if ob["inside"] else ("PROCHE" if ob["proche"] else "zone")
             bonus  = 3 if ob["inside"] else (2 if ob["proche"] else 0)
@@ -733,11 +827,10 @@ def collect_zones(analysis):
 
 
 def build_trade_plan(analysis, bias_dir, zones_buy, zones_sell, score_actif, seuil):
-    prix     = (analysis.get("M5") or {}).get("close", 0)
-    bull_dir = "BULL" if bias_dir == "BUY" else "BEAR"
-    entree   = "—"
-    sl       = "—"
-    tps      = []
+    prix   = (analysis.get("M5") or {}).get("close", 0)
+    entree = "—"
+    sl     = "—"
+    tps    = []
 
     if score_actif < seuil:
         return entree, sl, tps
@@ -776,8 +869,9 @@ def build_trade_plan(analysis, bias_dir, zones_buy, zones_sell, score_actif, seu
 # ══════════════════════════════════════════════════════════════
 
 def run_cycle():
+    global _last_rapport, _last_signal
+
     ts  = datetime.now().strftime("%H:%M:%S")
-    now = datetime.now(timezone.utc)
     print(f"\n  [{ts}] Analyse en cours...")
 
     analysis = analyze_all()
@@ -797,8 +891,10 @@ def run_cycle():
         style, seuil, score_actif = "—", 60, 0
 
     zones_buy, zones_sell = collect_zones(analysis)
-    entree, sl, tps = build_trade_plan(analysis, bias_dir or "BUY",
-                                       zones_buy, zones_sell, score_actif, seuil)
+    entree, sl, tps = build_trade_plan(
+        analysis, bias_dir or "BUY",
+        zones_buy, zones_sell, score_actif, seuil
+    )
 
     # ── Affichage terminal ───────────────────────────────────
     arrow = "▲ BUY" if bias_dir == "BUY" else ("▼ SELL" if bias_dir == "SELL" else "— NEUTRE")
@@ -808,7 +904,7 @@ def run_cycle():
     if entree != "—":
         print(f"  Entrée  : {entree}  |  SL : {sl}")
 
-    # ── Sauvegarde state.json (dashboard) ───────────────────
+    # ── State JSON ───────────────────────────────────────────
     m5  = analysis.get("M5") or {}
     mom = m5.get("momentum", {})
 
@@ -825,10 +921,10 @@ def run_cycle():
         "amd_phase"   : amd.get("phase", "?"),
         "amd_trade"   : trade_ok,
         "amd_conseil" : amd.get("conseil", ""),
-        "h4_dow"      : (analysis.get("H4") or {}).get("dow", "?"),
-        "h1_dow"      : (analysis.get("H1") or {}).get("dow", "?"),
+        "h4_dow"      : (analysis.get("H4")  or {}).get("dow", "?"),
+        "h1_dow"      : (analysis.get("H1")  or {}).get("dow", "?"),
         "m15_dow"     : (analysis.get("M15") or {}).get("dow", "?"),
-        "m5_dow"      : (analysis.get("M5") or {}).get("dow", "?"),
+        "m5_dow"      : (analysis.get("M5")  or {}).get("dow", "?"),
         "macd_bull"   : mom.get("macd_bull", False),
         "macd_bear"   : mom.get("macd_bear", False),
         "rsi"         : mom.get("rsi", 0),
@@ -841,48 +937,78 @@ def run_cycle():
     }
     save_state(state)
 
-    # ── Telegram — envoyer si signal fort ───────────────────
-    if state["signal_fort"] and entree != "—":
-        print("  🚀 Signal fort détecté — envoi Telegram...")
-        msg = format_telegram_message(
+    # ══ TELEGRAM — 3 NIVEAUX ═══════════════════════════════
+    now_ts = time.time()
+
+    # ─── NIVEAU 1 : Signal fort (AMD + score + biais) ────────
+    signal_key = f"{bias_dir}_{entree}_{score_actif}"
+    if state["signal_fort"] and entree != "—" and signal_key != _last_signal:
+        print("  🚀 NIVEAU 1 — Signal fort → Telegram")
+        msg = format_signal_fort(
             analysis, bias_dir, score_buy, score_sell,
             style, seuil, score_actif,
             zones_buy, zones_sell, entree, sl, tps
         )
-        send_telegram(msg)
+        if send_telegram(msg):
+            _last_signal = signal_key
 
-        # Sauvegarder dans trade log
         trade = {
-            "date"        : datetime.now().strftime("%d/%m/%Y %H:%M"),
-            "timestamp"   : datetime.now().isoformat(),
-            "bias"        : bias_dir,
-            "score"       : score_actif,
-            "style"       : style,
-            "prix"        : prix,
-            "entree"      : entree,
-            "sl"          : sl,
-            "tp1"         : tps[0][0] if len(tps) > 0 else "—",
-            "tp2"         : tps[1][0] if len(tps) > 1 else "—",
-            "tp3"         : tps[2][0] if len(tps) > 2 else "—",
-            "zone"        : (zones_sell if bias_dir == "SELL" else zones_buy)[0][2]
-                            if (zones_sell if bias_dir == "SELL" else zones_buy) else "—",
-            "amd"         : amd.get("phase", "?"),
-            "h4"          : (analysis.get("H4") or {}).get("dow", "?"),
-            "h1"          : (analysis.get("H1") or {}).get("dow", "?"),
-            "statut"      : "EN COURS",
-            "resultat"    : "",
-            "pips"        : "",
+            "date"     : datetime.now().strftime("%d/%m/%Y %H:%M"),
+            "timestamp": datetime.now().isoformat(),
+            "bias"     : bias_dir,
+            "score"    : score_actif,
+            "style"    : style,
+            "prix"     : prix,
+            "entree"   : entree,
+            "sl"       : sl,
+            "tp1"      : tps[0][0] if len(tps) > 0 else "—",
+            "tp2"      : tps[1][0] if len(tps) > 1 else "—",
+            "tp3"      : tps[2][0] if len(tps) > 2 else "—",
+            "zone"     : (zones_sell if bias_dir == "SELL" else zones_buy)[0][2]
+                         if (zones_sell if bias_dir == "SELL" else zones_buy) else "—",
+            "amd"      : amd.get("phase", "?"),
+            "h4"       : (analysis.get("H4") or {}).get("dow", "?"),
+            "h1"       : (analysis.get("H1") or {}).get("dow", "?"),
+            "statut"   : "EN COURS",
+            "resultat" : "",
+            "pips"     : "",
         }
         save_trade(trade)
         print(f"  📝 Trade loggé dans {TRADES_FILE}")
-    else:
-        reason = "Score insuffisant" if score_actif < seuil else \
-                 "Phase AMD défavorable" if not trade_ok else \
+
+    # ─── NIVEAU 2 : Alerte zone (prix entré dans zone) ────────
+    elif bias_dir:
+        zones_actives = zones_sell if bias_dir == "SELL" else zones_buy
+        for z in zones_actives[:3]:
+            prio, tf_z, type_z, bas_z, mid_z, haut_z, statut_z = z
+            if statut_z in ("DEDANS", "PROCHE"):
+                zone_key = f"zone_{tf_z}_{type_z}_{mid_z}"
+                if zone_key != _last_signal:
+                    print(f"  ⚡ NIVEAU 2 — Zone atteinte {type_z}[{tf_z}] → Telegram")
+                    msg = format_alerte_zone(analysis, bias_dir, score_actif, prix, z)
+                    if send_telegram(msg):
+                        _last_signal = zone_key
+                break
+
+    # ─── NIVEAU 3 : Rapport toutes les 15 minutes ─────────────
+    if now_ts - _last_rapport >= RAPPORT_INTERVAL:
+        print("  🕐 NIVEAU 3 — Rapport 15min → Telegram")
+        msg = format_rapport_15min(
+            analysis, bias_dir, score_buy, score_sell,
+            score_actif, seuil, style, amd, prix,
+            zones_buy, zones_sell, entree, sl
+        )
+        if send_telegram(msg):
+            _last_rapport = now_ts
+
+    # ── Statut terminal ──────────────────────────────────────
+    if not state["signal_fort"]:
+        reason = "Score insuffisant"   if score_actif < seuil else \
+                 "Phase AMD défavorable" if not trade_ok       else \
                  "Pas de biais clair"
-        print(f"  ⏸ Pas de signal — {reason}")
+        print(f"  ⏸ Pas de signal fort — {reason}")
 
     push_to_github()
-    
     return state
 
 
@@ -892,9 +1018,10 @@ def run_cycle():
 
 def run():
     print("\n" + "═" * 64)
-    print("  XAU/USD  SMART MONEY ANALYZER  V5.0")
-    print("  Telegram : activé  |  Dashboard : state.json")
-    print(f"  Intervalle : {SLEEP_SECONDS}s ({SLEEP_SECONDS//60} min)")
+    print("  XAU/USD  SMART MONEY ANALYZER  V5.1")
+    print("  Telegram : 3 niveaux d'alerte")
+    print(f"  Rapport  : toutes les {RAPPORT_INTERVAL//60} minutes")
+    print(f"  Intervalle analyse : {SLEEP_SECONDS//60} minutes")
     print("  Ctrl+C pour arrêter")
     print("═" * 64 + "\n")
 
