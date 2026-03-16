@@ -1398,5 +1398,25 @@
     "statut": "EN COURS",
     "resultat": "",
     "pips": ""
+  },
+  {
+    "date": "16/03/2026 19:21",
+    "timestamp": "2026-03-16T19:21:04.867378",
+    "bias": "BUY",
+    "score": 68,
+    "style": "SCALP",
+    "prix": 5022.0,
+    "entree": "5004.85",
+    "sl": "5001.7",
+    "tp1": 5030.05,
+    "tp2": 5024.15,
+    "tp3": "\u2014",
+    "zone": "FVG",
+    "amd": "DISTRIBUTION",
+    "h4": "BULL",
+    "h1": "BULL",
+    "statut": "EN COURS",
+    "resultat": "",
+    "pips": ""
   }
 ]

@@ -1,34 +1,45 @@
 {
-  "timestamp": "2026-03-16T19:11:23.370702",
-  "prix": 5020.9,
-  "bias": "NEUTRE",
-  "bias_reason": "Conflit H4:BULL / H1:BEAR",
-  "score_buy": 61,
-  "score_sell": 44,
-  "score_actif": 0,
-  "seuil": 60,
-  "style": "\u2014",
+  "timestamp": "2026-03-16T19:21:04.572745",
+  "prix": 5022.0,
+  "bias": "BUY",
+  "bias_reason": "H4 BULL + H1 BULL",
+  "score_buy": 68,
+  "score_sell": 36,
+  "score_actif": 68,
+  "seuil": 50,
+  "style": "SCALP",
   "amd_phase": "DISTRIBUTION",
   "amd_trade": true,
   "amd_conseil": "New York actif \u2014 vrai mouvement directionnel",
   "h4_dow": "BULL",
-  "h1_dow": "BEAR",
+  "h1_dow": "BULL",
   "m15_dow": "BULL",
   "m5_dow": "BULL",
   "macd_bull": "False",
   "macd_bear": "False",
-  "rsi": 74.7,
-  "entree": "\u2014",
-  "sl": "\u2014",
-  "tps": [],
+  "rsi": 71.4,
+  "entree": "5004.85",
+  "sl": "5001.7",
+  "tps": [
+    [
+      5030.05,
+      "OB",
+      "H1"
+    ],
+    [
+      5024.15,
+      "LIQ EqHighs",
+      "H1"
+    ]
+  ],
   "zones_buy": [
     [
       3,
       "H1",
       "FVG",
       5009.6,
-      5014.15,
-      5018.7,
+      5012.2,
+      5014.8,
       "attente"
     ],
     [
@@ -115,5 +126,5 @@
       "ATTEINT"
     ]
   ],
-  "signal_fort": false
+  "signal_fort": true
 }
