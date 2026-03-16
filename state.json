@@ -1,35 +1,44 @@
 {
-  "timestamp": "2026-03-16T01:33:57.026073",
-  "prix": 4988.49,
-  "bias": "SELL",
-  "bias_reason": "H4 BEAR + H1 BEAR",
-  "score_buy": 5,
-  "score_sell": 78,
-  "score_actif": 78,
+  "timestamp": "2026-03-16T02:55:22.531828",
+  "prix": 5002.54,
+  "bias": "NEUTRE",
+  "bias_reason": "Conflit H4:BEAR / H1:BULL",
+  "score_buy": 26,
+  "score_sell": 48,
+  "score_actif": 0,
   "seuil": 60,
-  "style": "INTRADAY",
+  "style": "\u2014",
   "amd_phase": "ACCUMULATION",
   "amd_trade": false,
   "amd_conseil": "Range asiatique \u2014 institutions accumulent",
   "h4_dow": "BEAR",
-  "h1_dow": "BEAR",
-  "m15_dow": "BULL",
+  "h1_dow": "BULL",
+  "m15_dow": "BEAR",
   "m5_dow": "BEAR",
   "macd_bull": "False",
   "macd_bear": "True",
-  "rsi": 30.8,
-  "entree": "4985.92",
-  "sl": "4993.96",
+  "rsi": 40.6,
+  "entree": "\u2014",
+  "sl": "\u2014",
   "tps": [],
   "zones_buy": [
     [
-      3,
+      5,
       "H1",
       "OB",
       5019.25,
       5019.63,
       5020.01,
-      "zone"
+      "PROCHE"
+    ],
+    [
+      5,
+      "M15",
+      "OB",
+      4986.62,
+      4995.92,
+      5005.23,
+      "DEDANS"
     ],
     [
       3,
@@ -41,43 +50,25 @@
       "ATTEINT"
     ],
     [
+      3,
+      "M5",
+      "OB",
+      4986.04,
+      4987.95,
+      4989.86,
+      "PROCHE"
+    ],
+    [
       2,
       "M15",
-      "LIQ EqLows",
-      5018.62,
-      5019.62,
-      5020.62,
-      "ATTEINT"
-    ],
-    [
-      1,
-      "M5",
       "BREAKER",
-      5021.19,
-      5025.36,
-      5029.53,
+      5015.86,
+      5022.6,
+      5029.35,
       "zone"
-    ],
-    [
-      1,
-      "M5",
-      "LIQ EqLows",
-      4991.03,
-      4992.03,
-      4993.03,
-      "ATTEINT"
     ]
   ],
   "zones_sell": [
-    [
-      4,
-      "M15",
-      "BREAKER",
-      4979.39,
-      4985.92,
-      4992.46,
-      "PROCHE"
-    ],
     [
       3,
       "H1",
@@ -90,19 +81,10 @@
     [
       2,
       "M15",
-      "OB",
-      5015.86,
-      5022.6,
-      5029.35,
-      "zone"
-    ],
-    [
-      2,
-      "M15",
       "FVG",
-      4989.86,
-      4990.27,
-      4990.68,
+      5006.22,
+      5009.05,
+      5011.88,
       "attente"
     ],
     [
@@ -112,6 +94,24 @@
       5018.9,
       5019.9,
       5020.9,
+      "AU DESSUS"
+    ],
+    [
+      1,
+      "M5",
+      "BREAKER",
+      4986.04,
+      4987.95,
+      4989.86,
+      "zone"
+    ],
+    [
+      1,
+      "M5",
+      "LIQ EqHighs",
+      5007.46,
+      5008.46,
+      5009.46,
       "AU DESSUS"
     ]
   ],
