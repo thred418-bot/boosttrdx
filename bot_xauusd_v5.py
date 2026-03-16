@@ -135,7 +135,7 @@ def format_signal_fort(analysis, bias_dir, score_buy, score_sell,
     cn, cd = m5.get("candle", (None, None))
     macd_ok   = (bias_dir == "BUY" and mom.get("macd_bull")) or (bias_dir == "SELL" and mom.get("macd_bear"))
     rsi_ok    = (bias_dir == "BUY" and mom.get("rsi_bull"))  or (bias_dir == "SELL" and mom.get("rsi_bear"))
-    candle_ok = cn and cd == bias_dir
+    candle_ok = bool(cn and cd == bias_dir)
 
     lines += [
         f"⚡ <b>Momentum M5 :</b>",
@@ -172,7 +172,7 @@ def format_alerte_zone(analysis, bias_dir, score_actif, prix, zone):
     cn, cd = m5.get("candle", (None, None))
     macd_ok   = (bias_dir == "BUY" and mom.get("macd_bull")) or (bias_dir == "SELL" and mom.get("macd_bear"))
     rsi_ok    = (bias_dir == "BUY" and mom.get("rsi_bull"))  or (bias_dir == "SELL" and mom.get("rsi_bear"))
-    candle_ok = cn and cd == bias_dir
+    candle_ok = bool(cn and cd == bias_dir)
     nb_ok     = sum([macd_ok, rsi_ok, candle_ok])
     etat      = "✅ ENTRER" if nb_ok >= 2 else ("⏳ PRESQUE" if nb_ok == 1 else "⏸ ATTENDRE")
 
