@@ -1,10 +1,10 @@
 {
-  "timestamp": "2026-03-16T02:55:22.531828",
-  "prix": 5002.54,
+  "timestamp": "2026-03-16T03:01:56.961474",
+  "prix": 5004.1,
   "bias": "NEUTRE",
   "bias_reason": "Conflit H4:BEAR / H1:BULL",
-  "score_buy": 26,
-  "score_sell": 48,
+  "score_buy": 33,
+  "score_sell": 44,
   "score_actif": 0,
   "seuil": 60,
   "style": "\u2014",
@@ -16,20 +16,20 @@
   "m15_dow": "BEAR",
   "m5_dow": "BEAR",
   "macd_bull": "False",
-  "macd_bear": "True",
-  "rsi": 40.6,
+  "macd_bear": "False",
+  "rsi": 44.3,
   "entree": "\u2014",
   "sl": "\u2014",
   "tps": [],
   "zones_buy": [
     [
-      5,
+      6,
       "H1",
       "OB",
-      5019.25,
-      5019.63,
-      5020.01,
-      "PROCHE"
+      4966.61,
+      4996.28,
+      5025.96,
+      "DEDANS"
     ],
     [
       5,
@@ -61,11 +61,11 @@
     [
       2,
       "M15",
-      "BREAKER",
-      5015.86,
-      5022.6,
-      5029.35,
-      "zone"
+      "LIQ EqLows",
+      5018.62,
+      5019.62,
+      5020.62,
+      "ATTEINT"
     ]
   ],
   "zones_sell": [
@@ -81,11 +81,11 @@
     [
       2,
       "M15",
-      "FVG",
-      5006.22,
-      5009.05,
-      5011.88,
-      "attente"
+      "BREAKER",
+      4986.62,
+      4995.93,
+      5005.23,
+      "zone"
     ],
     [
       2,

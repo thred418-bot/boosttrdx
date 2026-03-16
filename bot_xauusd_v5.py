@@ -19,7 +19,7 @@ import pandas as pd
 import numpy as np
 import requests
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -342,7 +342,7 @@ def dow_theory(df):
 
 
 def detect_amd_phase():
-    h = datetime.utcnow().hour
+    h = datetime.now(timezone.utc).hour
     if 0 <= h < 7:
         return {"phase": "ACCUMULATION", "code": "A", "trade": False,
                 "conseil": "Range asiatique — institutions accumulent"}
@@ -777,7 +777,7 @@ def build_trade_plan(analysis, bias_dir, zones_buy, zones_sell, score_actif, seu
 
 def run_cycle():
     ts  = datetime.now().strftime("%H:%M:%S")
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc)
     print(f"\n  [{ts}] Analyse en cours...")
 
     analysis = analyze_all()
@@ -903,7 +903,7 @@ def run():
 
     while True:
         try:
-            now     = datetime.utcnow()
+            now     = datetime.now(timezone.utc)
             weekday = now.weekday()
             h       = now.hour
 
