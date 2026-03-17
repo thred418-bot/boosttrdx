@@ -1,11 +1,11 @@
 {
-  "timestamp": "2026-03-17T00:27:22.609076",
-  "prix": 5002.96,
+  "timestamp": "2026-03-17T01:28:35.311455",
+  "prix": 5012.92,
   "bias": "SELL",
   "bias_reason": "H4 BEAR + H1 BEAR",
-  "score_buy": 34,
-  "score_sell": 57,
-  "score_actif": 57,
+  "score_buy": 68,
+  "score_sell": 34,
+  "score_actif": 34,
   "seuil": 60,
   "style": "INTRADAY",
   "amd_phase": "ACCUMULATION",
@@ -13,11 +13,11 @@
   "amd_conseil": "Range asiatique \u2014 institutions accumulent",
   "h4_dow": "BEAR",
   "h1_dow": "BEAR",
-  "m15_dow": "BEAR",
-  "m5_dow": "BEAR",
-  "macd_bull": "False",
-  "macd_bear": "True",
-  "rsi": 36.1,
+  "m15_dow": "BULL",
+  "m5_dow": "BULL",
+  "macd_bull": "True",
+  "macd_bear": "False",
+  "rsi": 68.1,
   "entree": "\u2014",
   "sl": "\u2014",
   "tps": [],
@@ -29,24 +29,6 @@
       4983.97,
       4993.38,
       5002.79,
-      "PROCHE"
-    ],
-    [
-      5,
-      "M15",
-      "OB",
-      5000.72,
-      5003.32,
-      5005.92,
-      "DEDANS"
-    ],
-    [
-      4,
-      "M15",
-      "BREAKER",
-      5006.52,
-      5006.65,
-      5006.79,
       "PROCHE"
     ],
     [
@@ -62,13 +44,49 @@
       3,
       "M5",
       "OB",
-      5004.38,
-      5007.41,
-      5010.44,
+      4998.03,
+      5001.84,
+      5005.66,
       "PROCHE"
+    ],
+    [
+      3,
+      "M5",
+      "BREAKER",
+      5005.33,
+      5007.74,
+      5010.14,
+      "PROCHE"
+    ],
+    [
+      2,
+      "M15",
+      "FVG",
+      5005.97,
+      5007.32,
+      5008.67,
+      "attente"
     ]
   ],
   "zones_sell": [
+    [
+      5,
+      "M15",
+      "OB",
+      5005.89,
+      5010.81,
+      5015.73,
+      "DEDANS"
+    ],
+    [
+      4,
+      "M15",
+      "BREAKER",
+      5000.72,
+      5003.32,
+      5005.92,
+      "PROCHE"
+    ],
     [
       3,
       "H1",
@@ -94,16 +112,7 @@
       5005.38,
       5006.38,
       5007.38,
-      "AU DESSUS"
-    ],
-    [
-      1,
-      "M5",
-      "LIQ EqHighs",
-      5005.07,
-      5006.07,
-      5007.07,
-      "AU DESSUS"
+      "ATTEINT"
     ]
   ],
   "signal_fort": false
