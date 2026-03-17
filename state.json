@@ -1,35 +1,53 @@
 {
-  "timestamp": "2026-03-17T01:28:35.311455",
-  "prix": 5012.92,
-  "bias": "SELL",
-  "bias_reason": "H4 BEAR + H1 BEAR",
-  "score_buy": 68,
-  "score_sell": 34,
-  "score_actif": 34,
+  "timestamp": "2026-03-17T05:05:48.745243",
+  "prix": 5035.05,
+  "bias": "NEUTRE",
+  "bias_reason": "Conflit H4:BEAR / H1:BULL",
+  "score_buy": 51,
+  "score_sell": 33,
+  "score_actif": 0,
   "seuil": 60,
-  "style": "INTRADAY",
+  "style": "\u2014",
   "amd_phase": "ACCUMULATION",
   "amd_trade": false,
   "amd_conseil": "Range asiatique \u2014 institutions accumulent",
   "h4_dow": "BEAR",
-  "h1_dow": "BEAR",
+  "h1_dow": "BULL",
   "m15_dow": "BULL",
   "m5_dow": "BULL",
-  "macd_bull": "True",
+  "macd_bull": "False",
   "macd_bear": "False",
-  "rsi": 68.1,
+  "rsi": 56.1,
   "entree": "\u2014",
   "sl": "\u2014",
   "tps": [],
   "zones_buy": [
     [
-      5,
+      4,
+      "M15",
+      "OB",
+      5021.57,
+      5024.61,
+      5027.65,
+      "PROCHE"
+    ],
+    [
+      3,
       "H1",
       "OB",
-      4983.97,
-      4993.38,
-      5002.79,
-      "PROCHE"
+      4999.2,
+      5006.15,
+      5013.09,
+      "zone"
+    ],
+    [
+      3,
+      "H1",
+      "FVG",
+      5032.45,
+      5033.4,
+      5034.36,
+      "attente"
     ],
     [
       3,
@@ -44,47 +62,20 @@
       3,
       "M5",
       "OB",
-      4998.03,
-      5001.84,
-      5005.66,
+      5026.52,
+      5028.06,
+      5029.6,
       "PROCHE"
-    ],
-    [
-      3,
-      "M5",
-      "BREAKER",
-      5005.33,
-      5007.74,
-      5010.14,
-      "PROCHE"
-    ],
-    [
-      2,
-      "M15",
-      "FVG",
-      5005.97,
-      5007.32,
-      5008.67,
-      "attente"
     ]
   ],
   "zones_sell": [
     [
-      5,
-      "M15",
-      "OB",
-      5005.89,
-      5010.81,
-      5015.73,
-      "DEDANS"
-    ],
-    [
       4,
       "M15",
       "BREAKER",
-      5000.72,
-      5003.32,
-      5005.92,
+      5021.57,
+      5024.61,
+      5027.65,
       "PROCHE"
     ],
     [
@@ -106,12 +97,21 @@
       "ATTEINT"
     ],
     [
+      3,
+      "M5",
+      "BREAKER",
+      5026.52,
+      5028.06,
+      5029.6,
+      "PROCHE"
+    ],
+    [
       2,
       "M15",
       "LIQ EqHighs",
-      5005.38,
-      5006.38,
-      5007.38,
+      5004.95,
+      5005.95,
+      5006.95,
       "ATTEINT"
     ]
   ],
