@@ -1,118 +1,134 @@
 {
-  "timestamp": "2026-03-16T23:47:56.876071",
-  "prix": 5015.2,
-  "bias": "NEUTRE",
-  "bias_reason": "Conflit H4:BULL / H1:BEAR",
-  "score_buy": 70,
-  "score_sell": 32,
-  "score_actif": 0,
-  "seuil": 60,
-  "style": "\u2014",
-  "amd_phase": "TRANSITION",
-  "amd_trade": true,
-  "amd_conseil": "Fin NY \u2014 volume en baisse, prudence",
-  "h4_dow": "BULL",
+  "timestamp": "2026-03-17T00:22:20.996667",
+  "prix": 5006.01,
+  "bias": "SELL",
+  "bias_reason": "H4 BEAR + H1 BEAR",
+  "score_buy": 35,
+  "score_sell": 55,
+  "score_actif": 55,
+  "seuil": 50,
+  "style": "SCALP",
+  "amd_phase": "ACCUMULATION",
+  "amd_trade": false,
+  "amd_conseil": "Range asiatique \u2014 institutions accumulent",
+  "h4_dow": "BEAR",
   "h1_dow": "BEAR",
-  "m15_dow": "BEAR",
-  "m5_dow": "BULL",
-  "macd_bull": "True",
-  "macd_bear": "False",
-  "rsi": 60.3,
-  "entree": "\u2014",
-  "sl": "\u2014",
-  "tps": [],
+  "m15_dow": "BULL",
+  "m5_dow": "BEAR",
+  "macd_bull": "False",
+  "macd_bear": "True",
+  "rsi": 43.7,
+  "entree": "5011.86",
+  "sl": "5015.6",
+  "tps": [
+    [
+      4993.37,
+      "LIQ EqLows",
+      "H1"
+    ],
+    [
+      4993.38,
+      "OB",
+      "H1"
+    ],
+    [
+      5003.32,
+      "OB",
+      "M15"
+    ]
+  ],
   "zones_buy": [
+    [
+      5,
+      "H1",
+      "OB",
+      4983.97,
+      4993.38,
+      5002.79,
+      "PROCHE"
+    ],
     [
       4,
       "M15",
       "OB",
-      5003.9,
-      5007.05,
-      5010.2,
+      5000.72,
+      5003.32,
+      5005.92,
       "PROCHE"
     ],
     [
       4,
       "M15",
       "BREAKER",
-      5014.2,
-      5021.1,
-      5028.0,
+      5006.52,
+      5006.65,
+      5006.79,
       "PROCHE"
-    ],
-    [
-      3,
-      "H1",
-      "BREAKER",
-      5018.8,
-      5030.05,
-      5041.3,
-      "zone"
     ],
     [
       3,
       "H1",
       "LIQ EqLows",
-      4999.7,
-      5000.7,
-      5001.7,
+      4992.37,
+      4993.37,
+      4994.37,
       "EN DESSOUS"
     ],
     [
-      3,
-      "M5",
-      "OB",
-      5010.4,
-      5011.05,
-      5011.7,
-      "PROCHE"
+      2,
+      "M15",
+      "LIQ EqLows",
+      5004.38,
+      5005.38,
+      5006.38,
+      "EN DESSOUS"
     ]
   ],
   "zones_sell": [
     [
-      5,
+      3,
       "H1",
-      "OB",
-      5018.8,
-      5030.05,
-      5041.3,
-      "PROCHE"
+      "BREAKER",
+      4983.97,
+      4993.38,
+      5002.79,
+      "zone"
     ],
     [
       3,
       "H1",
       "LIQ EqHighs",
-      5023.15,
-      5024.15,
-      5025.15,
-      "AU DESSUS"
+      4998.18,
+      4999.18,
+      5000.18,
+      "ATTEINT"
+    ],
+    [
+      3,
+      "M5",
+      "OB",
+      5009.62,
+      5011.86,
+      5014.1,
+      "PROCHE"
     ],
     [
       3,
       "M5",
       "BREAKER",
-      5005.7,
-      5007.15,
-      5008.6,
+      5000.72,
+      5002.72,
+      5004.72,
       "PROCHE"
     ],
     [
       2,
       "M15",
       "LIQ EqHighs",
-      5009.55,
-      5010.55,
-      5011.55,
-      "ATTEINT"
-    ],
-    [
-      1,
-      "M5",
-      "LIQ EqHighs",
-      5010.45,
-      5011.45,
-      5012.45,
-      "ATTEINT"
+      5005.38,
+      5006.38,
+      5007.38,
+      "AU DESSUS"
     ]
   ],
   "signal_fort": false
