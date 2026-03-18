@@ -3138,5 +3138,25 @@
     "statut": "EN COURS",
     "resultat": "",
     "pips": ""
+  },
+  {
+    "date": "17/03/2026 23:53",
+    "timestamp": "2026-03-17T23:53:22.245036",
+    "bias": "SELL",
+    "score": 64,
+    "style": "INTRADAY",
+    "prix": 5005.7,
+    "entree": "5023.65",
+    "sl": "5038.2",
+    "tp1": 4999.85,
+    "tp2": 5004.7,
+    "tp3": 5005.0,
+    "zone": "OB",
+    "amd": "TRANSITION",
+    "h4": "BEAR",
+    "h1": "BEAR",
+    "statut": "EN COURS",
+    "resultat": "",
+    "pips": ""
   }
 ]
